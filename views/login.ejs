@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- UIkit CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.16.19/dist/css/uikit.min.css" />
+    <!-- UIkit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.19/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.19/dist/js/uikit-icons.min.js"></script>
+</head>
+<body>
+    <div class="uk-container uk-container-xsmall">
+        <h3 class="uk-text-center">Login</h3>
+        <% if (gagal != '') { %>
+            <div class="uk-alert-danger" uk-alert>
+                <a class="uk-alert-close" uk-close></a>
+                <p> <%= gagal %> </p>
+            </div>
+        <% } %>
+        <% if (berhasil != '') { %>
+            <div class="uk-alert-success" uk-alert>
+                <a class="uk-alert-close" uk-close></a>
+                <p> <%= berhasil %> </p>
+            </div>
+        <% } %>
+        <form action="/" method="post">
+            <input class="uk-input uk-margin-top" type="text" name="username" placeholder="Username">
+            <input class="uk-input uk-margin-top" type="password" name="password" placeholder="Password">
+            <p class="uk-margin-small">Not registered? <a href="/register">Register</a></p>
+            <button class="uk-button uk-button-primary uk-width-1-1 " type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>
