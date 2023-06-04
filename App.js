@@ -6,6 +6,8 @@ const db = require('./config')
 const bodyParser = require('body-parser');
 const flash = require('express-flash');
 
+//Perubahan Test
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(
