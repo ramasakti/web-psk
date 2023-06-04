@@ -1,18 +1,13 @@
-const mysql = require('mysql');
+const knex = require('knex')
 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'web_psk'
-});
-
-connection.connect((error) => {
-    if (error) {
-        console.error('Koneksi database gagal: ', error);
-    } else {
-        console.log('Terhubung ke database MySQL');
+const db = knex({
+    client: 'mysql',
+    connection: {
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'web_psk'
     }
 });
 
-module.exports = connection
+module.exports = db

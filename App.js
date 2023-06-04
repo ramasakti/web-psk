@@ -5,12 +5,13 @@ const session = require('express-session');
 const db = require('./config')
 const bodyParser = require('body-parser');
 const flash = require('express-flash');
+const knex = require('knex');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(
     session({
-        secret: 'megawati', // Ganti dengan secret key yang lebih aman
+        secret: 'rahasimen', // Ganti dengan secret key yang lebih aman
         resave: false,
         saveUninitialized: true,
     })
@@ -32,15 +33,21 @@ app.get('/', (req, res) => {
 //Proses Login
 app.post('/', (req, res) => {
     const { username, password } = req.body
-    const sql = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`
-    db.query(sql, (err, result) => {
-        if (result.length < 1) {
-            req.flash('fail', 'Gagal Login!')
-            return res.redirect('/') 
-        }
-        req.session.nama = result[0].nama
-        return res.redirect('/dashboard')
-    })
+    db('users')
+        .select()
+        .where('username', username)
+        .where('password', password)
+        .then((user) => {
+            if (user.length < 1) {
+                req.flash('fail', 'Gagal Login!')
+                return res.redirect('/') 
+            }
+            req.session.nama = user[0].nama
+            return res.redirect('/dashboard')
+        })
+        .catch((err) => {
+            if (err) throw err
+        })
 });
 
 //Dashboard
@@ -71,13 +78,20 @@ app.get('/register', (req, res) => {
 
 //Proses Register
 app.post('/register', (req, res) => {
-    const { username, password, nama, email } = req.body
-    const sql = `INSERT INTO users (username, password, nama, email) VALUES ('${username}', '${password}', '${nama}', '${email}')`
-    db.query(sql, (err, result) => {
-        if (err) throw err
-        req.flash('success', 'Berhasil Register! Silahkan Login')
-        return res.redirect('/')
-    })
+    const { username, password, email, nama } = req.body;
+    const data = { username, password, email, nama }
+
+    db('users')
+        .insert(data)
+        .then(() => {
+            req.flash('success', 'Berhasil Register! Silahkan Login')
+            return res.redirect('/')
+        })
+        .catch((err) => {
+            if (err) throw err
+            req.flash('fail', 'Gagal Register!')
+            return res.redirect('/')
+        })
 });
 
 app.listen(3000, () => {
