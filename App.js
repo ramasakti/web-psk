@@ -6,8 +6,6 @@ const db = require('./config')
 const bodyParser = require('body-parser');
 const flash = require('express-flash');
 
-//Perubahan Test
-
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(
@@ -45,7 +43,7 @@ app.post('/', (req, res) => {
     })
 });
 
-//Dashboards
+//Dashboard
 app.get('/dashboard', (req, res) => {
     const nama = req.session.nama
     if (!nama) return res.redirect('/')
@@ -83,5 +81,5 @@ app.post('/register', (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log('Server berjalan di http://localhost:3000');
+    console.log('Server berjalan di http://localhost:3000');
 });
