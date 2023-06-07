@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const multer = require('multer');
+const fs = require('fs');
 const path = require('path');
 const session = require('express-session');
 const db = require('./config')
@@ -47,9 +48,16 @@ const upload = multer({ storage: storage });
 
 //Index
 app.get('/', (req, res) => {
-    res.render('index', {
-        
-    })
+    db('barang')
+        .select()
+        .then((barang) => {
+            res.render('index', {
+                barang
+            })
+        })
+        .catch((err) => {
+            if (err) throw err
+        })
 });
 
 //Login
@@ -136,9 +144,18 @@ app.post('/register', (req, res) => {
 
 //Store Barang
 app.post('/barang/store', upload.single('gambar'), (req, res) => {
+    // Mendapatkan data gambar yang diunggah dari form
+    const file = req.file;
+    const image = fs.readFileSync(file.path);
+    const encodedImage = image.toString('base64');
+
+    // Menghapus file sementara yang diunggah setelah mengambil datanya
+    fs.unlinkSync(file.path);
+
+    // Data yang akan diinsert
     const { nama_barang, harga, stok } = req.body
-    const gambar_barang = req.file.originalname
-    const dataBarang = { nama_barang, gambar_barang, harga, stok }
+    const dataBarang = { nama_barang, gambar_barang: encodedImage, harga, stok }
+
     db('barang')
         .insert(dataBarang)
         .then(() => {
@@ -150,7 +167,59 @@ app.post('/barang/store', upload.single('gambar'), (req, res) => {
         })
 });
 
-//Put Barang
+//Edit Barang
+app.get('/barang/edit/:id', upload.single('gambar'), (req, res) => {
+    db('barang')
+        .select()
+        .where('id_barang', req.params.id)
+        .then((barang) => {
+            const nama = req.session.nama
+            if (!nama) return res.redirect('/login')
+            res.render('edit', {
+                nama, 
+                barang
+            })
+        })
+        .catch((err) => {
+            if (err) throw err
+        })
+})
+
+//Update Barang
+app.post('/barang/update/:id', upload.single('gambar'), (req, res) => {
+    const { nama_barang, harga, stok } = req.body
+    if (!req.file) {
+        db('barang')
+            .where('id_barang', req.params.id)
+            .update({
+                nama_barang,
+                harga,
+                stok
+            })
+            .then(() => {
+                res.redirect('/dashboard')
+            })
+            .catch((err) => {
+                if (err) throw err
+            })
+    }else{
+        const gambar_barang = req.file.originalname
+        db('barang')
+            .where('id_barang', req.params.id)
+            .update({
+                nama_barang,
+                gambar_barang,
+                harga,
+                stok
+            })
+            .then(() => {
+                res.redirect('/dashboard')
+            })
+            .catch((err) => {
+                if (err) throw err
+            })
+    }
+})
 
 //Delete Barang
 

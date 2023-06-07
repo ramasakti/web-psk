@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- UIkit CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.16.19/dist/css/uikit.min.css" />
+    <!-- UIkit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.19/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.19/dist/js/uikit-icons.min.js"></script>
+</head>
+<body>
+    <div class="uk-container uk-container-xsmall">
+        <h1>Selamat Datang! <%= nama %></h1>
+        <a href="/logout">Logout</a>
+        <hr>
+        <h3>Edit Barang <%= barang[0].nama_barang %></h3>
+        <form action="/barang/update/<%= barang[0].id_barang %>" method="post" enctype="multipart/form-data">
+            <input class="uk-input uk-margin-small" type="text" name="nama_barang" id="nama_barang" value="<%= barang[0].nama_barang %>">
+            <input class="uk-input uk-margin-small" type="number" name="harga" id="harga" value="<%= barang[0].harga %>">
+            <input class="uk-input uk-margin-small" type="number" name="stok" id="stok" value="<%= barang[0].stok %>">
+            <input class="uk-input uk-margin-small" type="file" name="gambar" id="gambar">
+
+            <button class="uk-button uk-button-primary uk-width-1-1 " type="submit">Simpan</button>
+        </form>
+        <hr>      
+    </div>
+</body>
+</html>

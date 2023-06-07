@@ -13,6 +13,19 @@
 </head>
 <body>
     <div class="uk-container uk-container-xsmall">
+        <nav class="uk-navbar-container">
+            <div class="uk-container">
+                <div uk-navbar>
+                    <div class="uk-navbar-right">
+                        <ul class="uk-navbar-nav">
+                            <li><a href="/">Home</a></li>
+                            <li class="uk-active uk-margin-right"><a href="/login">Login</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
         <h3 class="uk-text-center">Login</h3>
         <% if (gagal != '') { %>
             <div class="uk-alert-danger" uk-alert>
