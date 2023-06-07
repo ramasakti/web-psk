@@ -95,10 +95,9 @@ app.get('/dashboard', (req, res) => {
     db('barang')
         .select()
         .then((barang) => {
-            const nama = req.session.nama
-            if (!nama) return res.redirect('/login')
+            if (!req.session.nama) return res.redirect('/login')
             res.render('dashboard', {
-                nama,
+                nama: req.session.nama,
                 barang
             })
         })
@@ -144,6 +143,7 @@ app.post('/register', (req, res) => {
 
 //Store Barang
 app.post('/barang/store', upload.single('gambar'), (req, res) => {
+    if (!req.session.nama) return res.redirect('/login')
     // Mendapatkan data gambar yang diunggah dari form
     const file = req.file;
     const image = fs.readFileSync(file.path);
@@ -169,6 +169,7 @@ app.post('/barang/store', upload.single('gambar'), (req, res) => {
 
 //Edit Barang
 app.get('/barang/edit/:id', upload.single('gambar'), (req, res) => {
+    if (!req.session.nama) return res.redirect('/login')
     db('barang')
         .select()
         .where('id_barang', req.params.id)
@@ -187,6 +188,7 @@ app.get('/barang/edit/:id', upload.single('gambar'), (req, res) => {
 
 //Update Barang
 app.post('/barang/update/:id', upload.single('gambar'), (req, res) => {
+    if (!req.session.nama) return res.redirect('/login')
     const { nama_barang, harga, stok } = req.body
     if (!req.file) {
         db('barang')
@@ -203,12 +205,19 @@ app.post('/barang/update/:id', upload.single('gambar'), (req, res) => {
                 if (err) throw err
             })
     }else{
-        const gambar_barang = req.file.originalname
+        // Mendapatkan data gambar yang diunggah dari form
+        const file = req.file;
+        const image = fs.readFileSync(file.path);
+        const encodedImage = image.toString('base64');
+
+        // Menghapus file sementara yang diunggah setelah mengambil datanya
+        fs.unlinkSync(file.path);
+
         db('barang')
             .where('id_barang', req.params.id)
             .update({
                 nama_barang,
-                gambar_barang,
+                gambar_barang: encodedImage,
                 harga,
                 stok
             })
@@ -222,6 +231,18 @@ app.post('/barang/update/:id', upload.single('gambar'), (req, res) => {
 })
 
 //Delete Barang
+app.get('/barang/delete/:id', (req, res) => {
+    if (!req.session.nama) return res.redirect('/login')
+    db('barang')
+        .where('id_barang', req.params.id)
+        .del()
+        .then(() => {
+            res.redirect('/dashboard')
+        })
+        .catch((err) => {
+            if (err) throw err
+        })
+})
 
 //End Router
 
