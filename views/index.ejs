@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Home</title>
     <!-- UIkit CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.16.19/dist/css/uikit.min.css" />
     <!-- UIkit JS -->
@@ -19,33 +19,38 @@
                     <div class="uk-navbar-right">
                         <ul class="uk-navbar-nav">
                             <li class="uk-active"><a href="/">Home</a></li>
-                            <li class="uk-margin-right"><a href="/login">Login</a></li>
+                            <li class="uk-margin-right">
+                                <% if (sessionLogin != null) { %>
+                                    <a href="/dashboard"><%= sessionLogin %></a>
+                                <% }else{ %>
+                                    <a href="/login">Login</a>
+                                <% } %>
+                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
         </nav>
 
-        <h2 class="uk-text-center">Data Barang</h2>
+        <h2 class="uk-text-center">Data</h2>
         <hr>
 
         <div class="uk-grid uk-child-width-1-2@s uk-child-width-1-3@m" uk-grid>
             <% for (let i = 0; i < barang.length; i++) { %>
-                <div class="uk-margin">
-                    <div class="uk-card uk-card-default">
-                        <div class="uk-card-media-top">
-                            <img src="data:image/png;base64,<%= barang[i].gambar_barang %>" style="height: auto;" alt="<%= barang[i].nama_barang %>">
+                <div class="uk-margin-remove-top uk-margin-bottom">
+                    <div class="uk-card uk-card-default" style="height: 330px;">
+                        <div class="uk-card-media-top" style="height: 200px; overflow: hidden;">
+                            <img src="data:image/png;base64,<%= barang[i].gambar_barang %>" class="uk-cover" alt="<%= barang[i].nama_barang %>">
                         </div>
                         <hr class="uk-margin-remove">
                         <div class="uk-card-body uk-padding-small">
                             <h3 class="uk-card-title"><%= barang[i].nama_barang %></h3>
-                            <a href="/barang/edit/<%= barang[i].id_barang %>" class="uk-icon-button uk-button-primary uk-margin-remove" uk-icon="pencil"></a>
-                            <a href="/barang/delete/<%= barang[i].id_barang %>" class="uk-icon-button uk-button-danger uk-margin-remove" uk-icon="trash"></a>
+                            <p><%= barang[i].harga %></p>
                         </div>
                     </div>
                 </div>
             <% } %>
-        </div>          
+        </div>         
     </div>
 </body>
 </html>

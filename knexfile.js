@@ -8,7 +8,9 @@ module.exports = {
   development: {
     client: 'mysql',
     connection: {
+      host: 'localhost',
       database: 'web_psk',
+      port : 3306,
       user:     'root',
       password: ''
     }
