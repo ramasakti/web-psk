@@ -7,6 +7,7 @@ const session = require('express-session');
 const db = require('./config')
 const bodyParser = require('body-parser');
 const flash = require('express-flash');
+const rsa = require('./rsa')
 
 //Setup View Engine
 app.set('view engine', 'ejs');
@@ -49,7 +50,6 @@ const upload = multer({ storage: storage });
 //Index
 app.get('/', async (req, res) => {
     const barang = await db('barang').select()
-
     res.render('index', {
         sessionLogin: req.session.nama,
         barang
@@ -84,20 +84,18 @@ app.post('/login', async (req, res) => {
 
 //Dashboard
 app.get('/dashboard', async (req, res) => {
-
-        const nama = req.session.nama
-        const pesanForRektor = await db('pesan').select();
-        const pesanForMhs = await db('pesan').where('pengirim', nama).select();
-        const barang = await db('barang').select();
-        if (!req.session.nama) return res.redirect('/login');
-        res.render('dashboard', {
-            nama,
-            status: req.session.status,
-            barang,
-            pesanForRektor,
-            pesanForMhs
-        });
-
+    const nama = req.session.nama
+    const pesanForRektor = await db('pesan').select();
+    const pesanForMhs = await db('pesan').where('pengirim', nama).select();
+    const barang = await db('barang').select();
+    if (!req.session.nama) return res.redirect('/login');
+    res.render('dashboard', {
+        nama,
+        status: req.session.status,
+        barang,
+        pesanForRektor,
+        pesanForMhs
+    });
 });
   
 
