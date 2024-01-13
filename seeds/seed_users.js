@@ -9,22 +9,36 @@ exports.seed = async function(knex) {
     {
       username: 'irwankautsar', 
       password: 'baksosolo', 
-      status: 'Rektor', 
+      status: 'Dosen', 
       email: 'irwan@umsida.ac.id', 
       nama: 'Irwan Alnarus Kautsar, S.Kom., M.Kom., Ph.D'
+    },
+    {
+      username: 'hidayatulloh', 
+      password: 'hidayatulloh', 
+      status: 'Rektor', 
+      email: 'rektor@umsida.ac.id', 
+      nama: 'Dr. Hidayatulloh, M.Sc'
     },
     {
       username: 'admin', 
       password: 'password', 
       status: 'Admin', 
       email: 'admin@umsida.ac.id', 
-      nama: 'Jenenge Admin'},
+      nama: 'Admin'},
     {
-      username: 'ramahilal', 
-      password: 'ramahilal', 
+      username: 'ramasakti', 
+      password: 'ramasakti', 
       status: 'Mahasiswa', 
-      email: 'ramahilal@gmail.com', 
-      nama: 'Rama Hilal'
+      email: 'ramasakti1337@gmail.com', 
+      nama: 'Rama Sakti'
+    },
+    {
+      username: 'hilal', 
+      password: 'hilal', 
+      status: 'Mahasiswa', 
+      email: 'hilal@gmail.com', 
+      nama: 'Hilal Hamdi'
     }
   ]);
 };
